@@ -26,6 +26,11 @@ Featuring rich ambient aesthetics inspired by the Hogwarts universe:
 
 ---
 
+
+https://github.com/user-attachments/assets/c6f35c10-bf50-4458-bba5-ce29d4e7e814
+
+
+
 ## ✨ Key Features
 
 ### 🏰 1. The Sorting Ceremony (Classes)
