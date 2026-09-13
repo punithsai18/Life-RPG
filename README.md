@@ -1,7 +1,5 @@
 #  The Wizarding Archives
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://life-rpg-phi-eight.vercel.app)
-
 > **Turn your real-world habits, daily routines, and self-improvement into an immersive Hogwarts character progression system.**
 
 ---
@@ -77,6 +75,59 @@ Spend earned Galleons to purchase cosmetic themes, boosters, and equipment:
 ---
 
 ## 🛠️ Architecture & Tech Stack
+
+### 📐 System Architecture Diagram
+
+```mermaid
+graph TD
+    subgraph Client ["Client Layer (Browser / Mobile)"]
+        UI["React 18 SPA (Vite + Tailwind)"]
+        Pages["Pages: Landing | Sorting | Dashboard | Emporium | Chronicle"]
+        State["Client State: AuthContext | GameContext | Theme Engine"]
+        UI --> Pages
+        UI --> State
+    end
+
+    subgraph VercelEdge ["Vercel Platform (Unified Fullstack)"]
+        CDN["Vercel Edge CDN (Static Assets & client/dist)"]
+        Gateway["Serverless API Gateway (api/index.js & [...path].js)"]
+    end
+
+    subgraph Backend ["Backend Layer (Express.js on Serverless)"]
+        MW["Middleware (Helmet, CORS, Rate Limiter, JWT Auth)"]
+        subgraph Routes ["API Controllers"]
+            R_Auth["/api/auth (Signup & Login)"]
+            R_Tasks["/api/tasks (Quests, Habits & Streaks)"]
+            R_Char["/api/me & /api/character (Stats & Level)"]
+            R_Shop["/api/shop (Themes, Potions & Gear)"]
+            R_Stats["/api/stats (Analytics & Heatmap)"]
+            R_Rules["/api/rules & /api/health"]
+        end
+        subgraph CoreEngine ["Game Engine Services"]
+            RulesEngine["XP & Level Curve Progression"]
+            StreakEngine["Streak Calculation & Shield Multipliers"]
+            DataCache["In-Memory Game Definitions Cache"]
+        end
+    end
+
+    subgraph DataLayer ["Database & External Services"]
+        Mongo[("MongoDB Atlas Cloud\n(Characters, Quests, Items, Definitions)")]
+        Firebase["Firebase Admin (Optional Google OAuth)"]
+    end
+
+    %% Network flows
+    Client -- "1. Loads Static Bundle" --> CDN
+    State -- "2. API Requests (Bearer JWT)" --> Gateway
+    Gateway -- "3. Invokes Express App" --> MW
+    MW --> Routes
+    Routes --> CoreEngine
+    CoreEngine --> Mongo
+    MW -.-> Firebase
+```
+
+---
+
+### 📁 Project Directory Structure
 
 ```
 Life-RPG/
